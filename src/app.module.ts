@@ -1,10 +1,24 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, // Torna as variáveis disponíveis globalmente
+    }),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT, 10),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true, // Habilita a sincronização automática (somente em desenvolvimento)
+    }),
+    TasksModule,
+  ],
 })
 export class AppModule {}
