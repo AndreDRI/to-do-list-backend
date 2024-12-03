@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: todo_db
+      MYSQL_USER: todo_user
+      MYSQL_PASSWORD: todopassword
+    ports:
+      - "4000:3306"
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
